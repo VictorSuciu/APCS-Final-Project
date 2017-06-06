@@ -5,6 +5,7 @@ public class Flag {
 	
 	private int x;
 	private int y;
+	
 	public Flag(int x, int y) {
 		
 		this.x = x * 30;
