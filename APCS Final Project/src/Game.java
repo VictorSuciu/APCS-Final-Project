@@ -20,8 +20,9 @@ public class Game{
             
         new PlatformRegistry();
         
+        Flag endFlag = new Flag(20, 5);
+        GameChar gamechar = new GameChar(20, 300);
         
-        GameChar gamechar = new GameChar(20, 50);
         background.setBounds(0, 0, 800, 600);
         panel.add(background);
         
@@ -30,6 +31,11 @@ public class Game{
  
     
 }
+ 
+ 
+ 
+ 
+ 
  
  
  
