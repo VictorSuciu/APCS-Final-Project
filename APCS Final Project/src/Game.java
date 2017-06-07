@@ -18,9 +18,9 @@ public class Game{
         frame.setSize(800, 600);
         frame.setVisible(true);
             
-        new PlatformRegistry();
+        new ComponentRegistry();
         
-        Flag endFlag = new Flag(20, 5);
+        
         GameChar gamechar = new GameChar(20, 300);
         
         background.setBounds(0, 0, 800, 600);

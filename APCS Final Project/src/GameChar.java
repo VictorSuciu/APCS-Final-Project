@@ -14,7 +14,8 @@ public class GameChar implements ActionListener, KeyListener{
     private double y;
     private double vx;
     private double vy;
-   
+    private int level = 0;
+    
     boolean upPressed = false;
     boolean canJump = false;
     boolean requestJump = false;
@@ -23,6 +24,7 @@ public class GameChar implements ActionListener, KeyListener{
     boolean touchingLeftSide = false;
     boolean touchingRightSide = false;
     boolean touchingTop = false;
+    boolean touchingFlag = false;
     
     Rectangle charHitBox = new Rectangle();
     Rectangle lrHitBox = new Rectangle();
@@ -30,10 +32,6 @@ public class GameChar implements ActionListener, KeyListener{
     
     JLabel character = new JLabel((new ImageIcon("Platformer Character.png")));
     Timer tm = new Timer(15, this);
-    
-    
-    
-    
     
     public GameChar(int x, int y) throws InterruptedException {
         
@@ -51,53 +49,56 @@ public class GameChar implements ActionListener, KeyListener{
         tm.start();
            
            
-        new PlatformRegistry();
+        new ComponentRegistry();
+        
+        
         Platform p1 = new Platform(0, 16, 6);
-        PlatformRegistry.platList.add(p1);
+        ComponentRegistry.platList.add(p1);
         
            Platform p2 = new Platform(9, 15, 6);
-           PlatformRegistry.platList.add(p2);
+           ComponentRegistry.platList.add(p2);
            
            Platform p3 = new Platform(17, 13, 4);
-           PlatformRegistry.platList.add(p3);
+           ComponentRegistry.platList.add(p3);
         
            Platform p4 = new Platform(23, 11, 2);
-           PlatformRegistry.platList.add(p4);
+           ComponentRegistry.platList.add(p4);
            
            Platform p5 = new Platform(18, 9, 3);
-           PlatformRegistry.platList.add(p5);
+           ComponentRegistry.platList.add(p5);
            
            Platform p6 = new Platform(14, 9, 1);
-           PlatformRegistry.platList.add(p6);
+           ComponentRegistry.platList.add(p6);
            
            Platform p7 = new Platform(10, 9, 1);
-           PlatformRegistry.platList.add(p7);
+           ComponentRegistry.platList.add(p7);
            
            Platform p8 = new Platform(6, 8, 1);
-           PlatformRegistry.platList.add(p8);
+           ComponentRegistry.platList.add(p8);
            
-           Platform p9 = new Platform(0, 18, 28);
-           PlatformRegistry.platList.add(p9);
+           Platform p9 = new Platform(0, 18, 27);
+           ComponentRegistry.platList.add(p9);
            
            Platform p10 = new Platform(0, 8, 6);
-           PlatformRegistry.platList.add(p10);
+           ComponentRegistry.platList.add(p10);
            
         Platform p11 = new Platform(1, 6, 1);
-           PlatformRegistry.platList.add(p11);
+           ComponentRegistry.platList.add(p11);
            
         Platform p12 = new Platform(5, 4, 3);
-           PlatformRegistry.platList.add(p12);
+           ComponentRegistry.platList.add(p12);
            
         Platform p13 = new Platform(11, 4, 3);
-           PlatformRegistry.platList.add(p13);
+           ComponentRegistry.platList.add(p13);
            
            Platform p14 = new Platform(17, 4, 3);
-           PlatformRegistry.platList.add(p14);
+           ComponentRegistry.platList.add(p14);
            
            Platform p15 = new Platform(22, 4, 5);
-           PlatformRegistry.platList.add(p15);
+           ComponentRegistry.platList.add(p15);
            
-           
+           Flag endFlag = new Flag(25, 2);
+           ComponentRegistry.flagList.add(endFlag);
        
         Game.panel.addKeyListener(this);
         Game.panel.setFocusable(true);
@@ -169,12 +170,15 @@ public class GameChar implements ActionListener, KeyListener{
         System.out.println("canJump = " + canJump);
         System.out.println("upPressed = " + upPressed);
         System.out.println("requestJump = " + requestJump);
-        */
+        
         
         System.out.println("leftSide = " + touchingLeftSide);
         System.out.println("rightSide = " + touchingRightSide);
-        
-        for(Platform p : PlatformRegistry.platList) {
+        */
+    	
+    	System.out.println(character.getY());
+    	
+        for(Platform p : ComponentRegistry.platList) {
                if(charHitBox.intersects(p.getHitBox())) {
                    touchingPlat = true;
                }
@@ -185,9 +189,13 @@ public class GameChar implements ActionListener, KeyListener{
                      if(vx > 0) {
                          touchingLeftSide = true;
                      }
-             }
-            
-             
+               }
+               
+        }
+        for(Flag f : ComponentRegistry.flagList) {
+        	if(charHitBox.intersects(f.getHitBox())) {
+        		touchingFlag = true;
+        	}
         }
             if(touchingPlat == true) {
                 if(canJump == false) {
@@ -236,6 +244,13 @@ public class GameChar implements ActionListener, KeyListener{
                 //repaint();
             }
             
+            if(y > 600 || x < -60 || x > 800) {
+            	x = 20;
+            	y = 300;
+            	vx = 0;
+            	vy = 0;
+            	repaint();
+            }
             
             touchingPlat = false;
             
@@ -243,6 +258,9 @@ public class GameChar implements ActionListener, KeyListener{
             touchingLeftSide = false;
             touchingRightSide = false;
             touchingTop = false;
+            
+            
+            
             
             repaint();
             
