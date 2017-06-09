@@ -76,6 +76,48 @@ public class Level {
 		Platform p1 = new Platform(0, 16, 6);
 		ComponentRegistry.platList.add(p1);
 
+		Platform p2 = new Platform(8, 14, 1);
+		ComponentRegistry.platList.add(p2);
+
+		Platform p3 = new Platform(13, 15, 1);
+		ComponentRegistry.platList.add(p3);
+		
+		Platform p4 = new Platform(18, 14, 2);
+		ComponentRegistry.platList.add(p4);
+		
+		Platform p5 = new Platform(23, 12, 3);
+		ComponentRegistry.platList.add(p5);
+
+		Platform p6 = new Platform(19, 11, 1);
+		ComponentRegistry.platList.add(p6);
+
+		Platform p7 = new Platform(16, 9, 2);
+		ComponentRegistry.platList.add(p7);
+		
+		Platform p8 = new Platform(20, 7, 5);
+		ComponentRegistry.platList.add(p8);
+
+		Platform p9 = new Platform(21, 6, 4);
+		ComponentRegistry.platList.add(p9);
+
+		Platform p10 = new Platform(22, 5, 3);
+		ComponentRegistry.platList.add(p10);
+
+		Platform p11 = new Platform(23, 4, 2);
+		ComponentRegistry.platList.add(p11);
+
+		Platform p12 = new Platform(24, 3, 1);
+		ComponentRegistry.platList.add(p12);
+
+		Platform p13 = new Platform(12, 2, 8);
+		ComponentRegistry.platList.add(p13);
+
+		Platform p14 = new Platform(2, 10, 5);
+		ComponentRegistry.platList.add(p14);
+
+		Flag endFlag = new Flag(3, 8);
+		ComponentRegistry.flagList.add(endFlag);
+
 	}
 
 }

@@ -210,8 +210,8 @@ public class GameChar implements ActionListener, KeyListener {
 					System.out.println("Making level 2");
 					Level.level2();
 					Game.panel.setComponentZOrder(character, 0);
-					x = 20;
-					y = 300;
+					x = 670;
+					y = 0;
 					repaint();
 				}
 			}

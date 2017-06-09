@@ -22,6 +22,9 @@ public class Flag {
 		flag.setBounds(this.x, this.y, 30, 60);
 
 		Game.panel.add(flag);
+		
+		Game.panel.setComponentZOrder(flag, 0);
+		
 		flagHitBox.setLocation(flag.getX(), flag.getY());
 	}
 
@@ -31,5 +34,6 @@ public class Flag {
 
 	public void remove() {
 		Game.panel.remove(flag);
+		flagHitBox.reshape(0, 0, 0, 0);
 	}
 }
