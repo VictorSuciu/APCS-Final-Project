@@ -17,13 +17,20 @@ public class Level {
 			f.remove();
 			Game.panel.repaint();
 		}
+		for (JumpPad jp : ComponentRegistry.padList) {
+			jp.remove();
+			Game.panel.repaint();
+		}
 	}
 
 	public static void level1() {
 
 		Platform p1 = new Platform(0, 16, 6);
 		ComponentRegistry.platList.add(p1);
-
+		
+		JumpPad jp1 = new JumpPad(8, 18);
+		ComponentRegistry.padList.add(jp1);
+		
 		Platform p2 = new Platform(9, 15, 6);
 		ComponentRegistry.platList.add(p2);
 

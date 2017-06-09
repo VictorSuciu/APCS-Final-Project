@@ -29,7 +29,7 @@ public class GameChar implements ActionListener, KeyListener {
 	boolean touchingTop = false;
 	public boolean touchingFlag = false;
 	boolean addedWin = false;
-
+	boolean touchingJP = false;
 	// These are the two hitboxes of the character that detect collisions with
 	// the platforms' hitboxes
 	// lrHitBox detects collisions on the side of platforms, and charHitBox
@@ -143,6 +143,12 @@ public class GameChar implements ActionListener, KeyListener {
 				touchingFlag = true;
 			}
 		}
+		for (JumpPad jp : ComponentRegistry.padList) {
+			if(charHitBox.intersects(jp.getHitBox())) {
+				touchingJP = true;
+			}
+		}
+		
 		if (touchingPlat == true) {
 			if (canJump == false) {
 				canJump = true;
@@ -184,7 +190,7 @@ public class GameChar implements ActionListener, KeyListener {
 			vx = 2.0;
 			// repaint();
 		}
-
+		
 		if (y > 600 || x < -60 || x > 800) {
 			x = 20;
 			y = 300;
@@ -192,7 +198,11 @@ public class GameChar implements ActionListener, KeyListener {
 			vy = 0;
 			repaint();
 		}
-
+		
+		if(touchingJP == true && vy > 0.0) {
+			vy = -11.0;
+			
+		}
 		if (touchingFlag == true) {
 			touchingFlag = false;
 			levelsWon++;
@@ -223,7 +233,8 @@ public class GameChar implements ActionListener, KeyListener {
 		touchingLeftSide = false;
 		touchingRightSide = false;
 		touchingTop = false;
-
+		touchingJP = false;
+				
 		repaint();
 
 	}
