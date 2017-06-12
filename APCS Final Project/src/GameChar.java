@@ -32,6 +32,8 @@ public class GameChar implements ActionListener, KeyListener {
 	boolean addedWin = false;
 	boolean touchingJP = false;
 	boolean touchingSpike = false;
+	boolean requestLeft = false;
+	boolean requestRight = false;
 	// These are the two hitboxes of the character that detect collisions with
 	// the platforms' hitboxes
 	// lrHitBox detects collisions on the side of platforms, and charHitBox
@@ -77,14 +79,14 @@ public class GameChar implements ActionListener, KeyListener {
 
 		if (key == KeyEvent.VK_RIGHT) {
 			if (touchingLeftSide == false) {
-				vx = 2.0;
+				requestRight = true;
 				
 			}
 
 		}
 		if (key == KeyEvent.VK_LEFT) {
 			if (touchingRightSide == false) {
-				vx = -2.0;
+				requestLeft = true;
 				
 			}
 		}
@@ -103,11 +105,11 @@ public class GameChar implements ActionListener, KeyListener {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_RIGHT) {
-			vx = 0.0;
+			requestRight = false;
 			
 		}
 		if (key == KeyEvent.VK_LEFT) {
-			vx = 0.0;
+			requestLeft = false;
 			
 		}
 		if (key == KeyEvent.VK_UP) {
@@ -194,7 +196,16 @@ public class GameChar implements ActionListener, KeyListener {
 	
 				bounceOffBottom = false;
 			}
-	
+			if(requestLeft == true && requestRight == false) {
+				vx = -2.0;
+			}
+			else if(requestLeft == false && requestRight == true) {
+				vx = 2.0;
+			}
+			else if((requestLeft == true && requestRight == true) || (requestLeft == false && requestRight == false)) {
+				vx = 0.0;
+			}
+				
 			if (touchingLeftSide == true) {
 				vx = -2.0;
 			} 
