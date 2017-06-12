@@ -15,7 +15,8 @@ public class GameChar implements ActionListener, KeyListener {
 	private double vx;
 	private double vy;
 	private int levelsWon = 0;
-
+	private int respawnX = 20;
+	private int respawnY = 350;
 	// These are the booleans that hold data about the state of the character.
 	// These include
 	// collisions, the ability to jump, and win status of the game.
@@ -30,6 +31,7 @@ public class GameChar implements ActionListener, KeyListener {
 	public boolean touchingFlag = false;
 	boolean addedWin = false;
 	boolean touchingJP = false;
+	boolean touchingSpike = false;
 	// These are the two hitboxes of the character that detect collisions with
 	// the platforms' hitboxes
 	// lrHitBox detects collisions on the side of platforms, and charHitBox
@@ -122,7 +124,7 @@ public class GameChar implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		System.out.println(upPressed);
+		System.out.println(touchingJP);
 
 		for (Platform p : ComponentRegistry.platList) {
 			if (charHitBox.intersects(p.getHitBox())) {
@@ -148,60 +150,66 @@ public class GameChar implements ActionListener, KeyListener {
 				touchingJP = true;
 			}
 		}
-		
-		if (touchingPlat == true) {
-			if (canJump == false) {
-				canJump = true;
-			}
-			if (requestJump == true) {
-				vy = -5.5;
-				// repaint();
-			} else if (vy < 0.0) {
-				bounceOffBottom = true;
-				
-			} else if (requestJump == false) {
-
-				vy = 0.0;
-				// repaint();
-
-			}
-			if (bounceOffBottom == true) {
-				vy = 3.0;
-
+		for (Spike s : ComponentRegistry.spikeList) {
+			if(charHitBox.intersects(s.getHitBox())) {
+				touchingSpike = true;
 			}
 		}
-
-		else {
-			requestJump = false;
-			
-			if (canJump == true) {
-				canJump = false;
-			}
-			vy += 0.2;
-
-			bounceOffBottom = false;
-		}
-
-		if (touchingLeftSide == true) {
-			vx = -2.0;
-		} 
-		
-		else if (touchingRightSide == true) {
-			vx = 2.0;
-			// repaint();
-		}
-		
-		if (y > 600 || x < -60 || x > 800) {
-			x = 20;
-			y = 300;
-			vx = 0;
-			vy = 0;
-			repaint();
-		}
-		
 		if(touchingJP == true && vy > 0.0) {
-			vy = -11.0;
+			vy = -10.5;
 			
+		}
+		else {
+			if (touchingPlat == true) {
+				if (canJump == false) {
+					canJump = true;
+				}
+				if (requestJump == true) {
+					vy = -5.5;
+					// repaint();
+				} else if (vy < 0.0) {
+					bounceOffBottom = true;
+					
+				} else if (requestJump == false) {
+	
+					vy = 0.0;
+					// repaint();
+	
+				}
+				if (bounceOffBottom == true) {
+					vy = 3.0;
+	
+				}
+			}
+	
+			else {
+				requestJump = false;
+				
+				if (canJump == true) {
+					canJump = false;
+				}
+				
+				vy += 0.2;
+				
+	
+				bounceOffBottom = false;
+			}
+	
+			if (touchingLeftSide == true) {
+				vx = -2.0;
+			} 
+			
+			else if (touchingRightSide == true) {
+				vx = 2.0;
+				// repaint();
+			}
+			
+			if (y > 600 || x < -60 || x > 800) {
+				respawn();
+			}
+		}
+		if(touchingSpike == true) {
+			respawn();
 		}
 		if (touchingFlag == true) {
 			touchingFlag = false;
@@ -210,7 +218,7 @@ public class GameChar implements ActionListener, KeyListener {
 			if (levelsWon == Level.numberOfLevels) {
 				JLabel winScreen = new JLabel(new ImageIcon("Platformer You Win.png"));
 				winScreen.setBounds(0, 0, 800, 600);
-
+				
 				Game.panel.add(winScreen);
 				Game.panel.setComponentZOrder(winScreen, 0);
 				touchingFlag = false;
@@ -220,11 +228,32 @@ public class GameChar implements ActionListener, KeyListener {
 					System.out.println("Making level 2");
 					Level.level2();
 					Game.panel.setComponentZOrder(character, 0);
-					x = 20;
-					y = 400;
-					repaint();
+					respawnX = 20;
+					respawnY = 350;
+					respawn();
 				}
-			}
+				else if(levelsWon == 2) {
+					Level.level3();
+					Game.panel.setComponentZOrder(character, 0);
+					respawnX = 20;
+					respawnY = 350;
+					respawn();
+				}
+				else if(levelsWon == 3) {
+					Level.level4();
+					Game.panel.setComponentZOrder(character, 0);
+					respawnX = -30;
+					respawnY = 350;
+					respawn();
+				}
+				else if(levelsWon == 4) {
+					Level.level5();
+					Game.panel.setComponentZOrder(character, 0);
+					respawnX = -30;
+					respawnY = 350;
+					respawn();
+				}
+			} 
 
 		}
 
@@ -234,7 +263,7 @@ public class GameChar implements ActionListener, KeyListener {
 		touchingRightSide = false;
 		touchingTop = false;
 		touchingJP = false;
-				
+		touchingSpike = false;
 		repaint();
 
 	}
@@ -249,5 +278,12 @@ public class GameChar implements ActionListener, KeyListener {
 
 		Game.panel.repaint();
 	}
-
+	
+	public void respawn() {
+		x = respawnX;
+		y = respawnY;
+		vx = 0;
+		vy = 0;
+		repaint();
+	}
 }

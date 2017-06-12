@@ -32,7 +32,7 @@ public class Game {
 		frame.setVisible(true);
 
 		// This is where the smiley face character gets initialized
-		GameChar gamechar = new GameChar(650, 0);
+		GameChar gamechar = new GameChar(20, 350);
 
 		// adding the background
 		background.setBounds(0, 0, 800, 600);
