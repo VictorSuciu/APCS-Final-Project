@@ -40,7 +40,8 @@ public class GameChar implements ActionListener, KeyListener {
 	// detects collisions on
 	// the tops and bottoms of them.
 	Rectangle charHitBox = new Rectangle();
-	Rectangle lrHitBox = new Rectangle();
+	Rectangle rHitBox = new Rectangle();
+	Rectangle lHitBox = new Rectangle();
 
 	JLabel character = new JLabel((new ImageIcon("Platformer Character.png")));
 	Timer tm = new Timer(15, this);
@@ -48,7 +49,8 @@ public class GameChar implements ActionListener, KeyListener {
 	public GameChar(int x, int y) throws InterruptedException {
 
 		charHitBox.setBounds(x, y, 30, 30);
-		lrHitBox.setBounds(x - 5, y + 10, 40, 15);
+		lHitBox.setBounds(x + 15, y + 10, 20, 15);
+		rHitBox.setBounds(x - 5, y + 10, 20, 15);
 
 		this.x = (double) x;
 		this.y = (double) y;
@@ -80,21 +82,21 @@ public class GameChar implements ActionListener, KeyListener {
 		if (key == KeyEvent.VK_RIGHT) {
 			if (touchingLeftSide == false) {
 				requestRight = true;
-				
+
 			}
 
 		}
 		if (key == KeyEvent.VK_LEFT) {
 			if (touchingRightSide == false) {
 				requestLeft = true;
-				
+
 			}
 		}
 		if (key == KeyEvent.VK_UP) {
 			if (canJump == true) {
 				requestJump = true;
 				upPressed = true;
-				
+
 			}
 		}
 
@@ -106,11 +108,11 @@ public class GameChar implements ActionListener, KeyListener {
 
 		if (key == KeyEvent.VK_RIGHT) {
 			requestRight = false;
-			
+
 		}
 		if (key == KeyEvent.VK_LEFT) {
 			requestLeft = false;
-			
+
 		}
 		if (key == KeyEvent.VK_UP) {
 			upPressed = false;
@@ -125,19 +127,23 @@ public class GameChar implements ActionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		System.out.println(touchingJP);
 
 		for (Platform p : ComponentRegistry.platList) {
+			if (rHitBox.intersects(p.getHitBox())) {
+
+				touchingRightSide = true;
+
+			} else if (lHitBox.intersects(p.getHitBox())) {
+				touchingLeftSide = true;
+			}
 			if (charHitBox.intersects(p.getHitBox())) {
 				touchingPlat = true;
-			}
-			if (lrHitBox.intersects(p.getHitBox())) {
-				if (vx < 0) {
-					touchingRightSide = true;
-				}
-				if (vx > 0) {
-					touchingLeftSide = true;
+				
+				//if the left or right hitboxes are touching the same platform that the character is on,
+				//it doesn't do anything
+				if (rHitBox.intersects(p.getHitBox()) || lHitBox.intersects(p.getHitBox())) {
+					touchingRightSide = false;
+					touchingLeftSide = false;
 				}
 			}
 
@@ -148,20 +154,19 @@ public class GameChar implements ActionListener, KeyListener {
 			}
 		}
 		for (JumpPad jp : ComponentRegistry.padList) {
-			if(charHitBox.intersects(jp.getHitBox())) {
+			if (charHitBox.intersects(jp.getHitBox())) {
 				touchingJP = true;
 			}
 		}
 		for (Spike s : ComponentRegistry.spikeList) {
-			if(charHitBox.intersects(s.getHitBox())) {
+			if (charHitBox.intersects(s.getHitBox())) {
 				touchingSpike = true;
 			}
 		}
-		if(touchingJP == true && vy > 0.0) {
+		if (touchingJP == true && vy > 0.0) {
 			vy = -10.5;
-			
-		}
-		else {
+
+		} else {
 			if (touchingPlat == true) {
 				if (canJump == false) {
 					canJump = true;
@@ -171,55 +176,54 @@ public class GameChar implements ActionListener, KeyListener {
 					// repaint();
 				} else if (vy < 0.0) {
 					bounceOffBottom = true;
-					
+
 				} else if (requestJump == false) {
-	
+
 					vy = 0.0;
 					// repaint();
-	
+
 				}
 				if (bounceOffBottom == true) {
 					vy = 3.0;
-	
+
 				}
+
 			}
-	
+
 			else {
 				requestJump = false;
-				
+
 				if (canJump == true) {
 					canJump = false;
 				}
-				
+
 				vy += 0.2;
-				
-	
+
 				bounceOffBottom = false;
 			}
-			if(requestLeft == true && requestRight == false) {
+			if (requestLeft == true && requestRight == false) {
 				vx = -2.0;
-			}
-			else if(requestLeft == false && requestRight == true) {
+			} else if (requestLeft == false && requestRight == true) {
 				vx = 2.0;
-			}
-			else if((requestLeft == true && requestRight == true) || (requestLeft == false && requestRight == false)) {
+			} else if ((requestLeft == true && requestRight == true)
+					|| (requestLeft == false && requestRight == false)) {
 				vx = 0.0;
 			}
-				
+
 			if (touchingLeftSide == true) {
 				vx = -2.0;
-			} 
-			
+			}
+
 			else if (touchingRightSide == true) {
 				vx = 2.0;
 				// repaint();
 			}
-			
+
 			if (y > 600 || x < -60 || x > 800) {
 				respawn();
 			}
 		}
-		if(touchingSpike == true) {
+		if (touchingSpike == true) {
 			respawn();
 		}
 		if (touchingFlag == true) {
@@ -229,7 +233,7 @@ public class GameChar implements ActionListener, KeyListener {
 			if (levelsWon == Level.numberOfLevels) {
 				JLabel winScreen = new JLabel(new ImageIcon("Platformer You Win.png"));
 				winScreen.setBounds(0, 0, 800, 600);
-				
+
 				Game.panel.add(winScreen);
 				Game.panel.setComponentZOrder(winScreen, 0);
 				touchingFlag = false;
@@ -242,29 +246,26 @@ public class GameChar implements ActionListener, KeyListener {
 					respawnX = 20;
 					respawnY = 350;
 					respawn();
-				}
-				else if(levelsWon == 2) {
+				} else if (levelsWon == 2) {
 					Level.level3();
 					Game.panel.setComponentZOrder(character, 0);
 					respawnX = 20;
 					respawnY = 350;
 					respawn();
-				}
-				else if(levelsWon == 3) {
+				} else if (levelsWon == 3) {
 					Level.level4();
 					Game.panel.setComponentZOrder(character, 0);
 					respawnX = -30;
 					respawnY = 350;
 					respawn();
-				}
-				else if(levelsWon == 4) {
+				} else if (levelsWon == 4) {
 					Level.level5();
 					Game.panel.setComponentZOrder(character, 0);
 					respawnX = -30;
 					respawnY = 350;
 					respawn();
 				}
-			} 
+			}
 
 		}
 
@@ -285,11 +286,12 @@ public class GameChar implements ActionListener, KeyListener {
 		character.setBounds((int) Math.round(x), (int) Math.round(y), 100, 100);
 
 		charHitBox.setLocation(character.getX() + 35, character.getY() + 35);
-		lrHitBox.setLocation((int) charHitBox.getX() - 5, (int) charHitBox.getY() + 8);
+		lHitBox.setLocation((int) charHitBox.getX() + 15, (int) charHitBox.getY() + 8);
+		rHitBox.setLocation((int) charHitBox.getX() - 5, (int) charHitBox.getY() + 8);
 
 		Game.panel.repaint();
 	}
-	
+
 	public void respawn() {
 		x = respawnX;
 		y = respawnY;

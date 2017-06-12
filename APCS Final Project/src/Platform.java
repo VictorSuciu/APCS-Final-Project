@@ -38,4 +38,5 @@ public class Platform {
 		}
 		platHitBox.reshape(0, 0, 0, 0);
 	}
+	
 }
