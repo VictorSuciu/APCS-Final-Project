@@ -271,5 +271,10 @@ public class Level {
 		Flag endFlag = new Flag(0, 0);
 		ComponentRegistry.flagList.add(endFlag);
 	}
+	
+	public static void level6() {
+		eraseLast();
+		
+	}
 
 }
