@@ -68,7 +68,7 @@ public class GameChar implements ActionListener, KeyListener {
 
 		new Level();
 
-		Level.level5();
+		Level.level1();
 		Game.panel.setComponentZOrder(character, 0);
 
 		Game.panel.addKeyListener(this);
