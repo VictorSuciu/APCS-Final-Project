@@ -34,6 +34,7 @@ public class GameChar implements ActionListener, KeyListener {
 	boolean touchingSpike = false;
 	boolean requestLeft = false;
 	boolean requestRight = false;
+	boolean touchingBottom = true;
 	// These are the two hitboxes of the character that detect collisions with
 	// the platforms' hitboxes
 	// lrHitBox detects collisions on the side of platforms, and charHitBox
@@ -42,7 +43,8 @@ public class GameChar implements ActionListener, KeyListener {
 	Rectangle charHitBox = new Rectangle();
 	Rectangle rHitBox = new Rectangle();
 	Rectangle lHitBox = new Rectangle();
-
+	Rectangle lowHitBox = new Rectangle();
+	
 	JLabel character = new JLabel((new ImageIcon("Platformer Character.png")));
 	Timer tm = new Timer(15, this);
 
@@ -51,7 +53,8 @@ public class GameChar implements ActionListener, KeyListener {
 		charHitBox.setBounds(x, y, 30, 30);
 		lHitBox.setBounds(x + 15, y + 10, 20, 15);
 		rHitBox.setBounds(x - 5, y + 10, 20, 15);
-
+		lowHitBox.setBounds(x, y - 29, 30, 1);
+		
 		this.x = (double) x;
 		this.y = (double) y;
 		character.setBounds(x, y, 15, 15);
@@ -65,7 +68,7 @@ public class GameChar implements ActionListener, KeyListener {
 
 		new Level();
 
-		Level.level1();
+		Level.level5();
 		Game.panel.setComponentZOrder(character, 0);
 
 		Game.panel.addKeyListener(this);
@@ -136,6 +139,9 @@ public class GameChar implements ActionListener, KeyListener {
 			} else if (lHitBox.intersects(p.getHitBox())) {
 				touchingLeftSide = true;
 			}
+			if(lowHitBox.intersects(p.getHitBox())) {
+				touchingBottom = true;
+			}
 			if (charHitBox.intersects(p.getHitBox())) {
 				touchingPlat = true;
 				
@@ -174,7 +180,7 @@ public class GameChar implements ActionListener, KeyListener {
 				if (requestJump == true) {
 					vy = -5.5;
 					// repaint();
-				} else if (vy < 0.0) {
+				} else if (touchingBottom == false) {
 					bounceOffBottom = true;
 
 				} else if (requestJump == false) {
@@ -276,6 +282,7 @@ public class GameChar implements ActionListener, KeyListener {
 		touchingTop = false;
 		touchingJP = false;
 		touchingSpike = false;
+		touchingBottom = false;
 		repaint();
 
 	}
@@ -288,7 +295,7 @@ public class GameChar implements ActionListener, KeyListener {
 		charHitBox.setLocation(character.getX() + 35, character.getY() + 35);
 		lHitBox.setLocation((int) charHitBox.getX() + 15, (int) charHitBox.getY() + 8);
 		rHitBox.setLocation((int) charHitBox.getX() - 5, (int) charHitBox.getY() + 8);
-
+		lowHitBox.setLocation((int) charHitBox.getX(), (int)charHitBox.getY() + 29);
 		Game.panel.repaint();
 	}
 

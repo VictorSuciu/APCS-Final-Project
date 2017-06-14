@@ -29,6 +29,7 @@ public class Game {
 		new Menu();
 		
 		frame.setSize(800, 600);
+		frame.setResizable(false);
 		frame.setVisible(true);
 		System.out.println("Creating menu");
 		
